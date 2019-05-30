@@ -19,7 +19,7 @@ mixin ConnectedProductsModel on Model {
       'title': title,
       'description': description,
       'image':
-          'http://indieruckus.com/main/wp-content/uploads/2015/03/choco1.jpg',
+          'https://thumbs-prod.si-cdn.com/-Bw2AdjyqIJrZLHAFfsHWuabXmk=/800x600/filters:no_upscale()/https://public-media.si-cdn.com/filer/79/da/79da64da-018b-49f2-b590-8b2e8bc62f9e/chocolate.jpg',
       'price': price,
       'userEmail': _authenticatedUser.email,
       'userId': _authenticatedUser.id,
@@ -74,17 +74,36 @@ mixin ProductsModel on ConnectedProductsModel {
     return _showFavorites;
   }
 
-  void updateProduct(
+  Future<Null> updateProduct(
       String title, String description, String image, double price) {
-    final Product updatedProduct = Product(
-        title: title,
-        description: description,
-        image: image,
-        price: price,
-        userEmail: selectedProduct.userEmail,
-        userId: selectedProduct.userId);
-    _products[selectedProductIndex] = updatedProduct;
+    _isLoading = true;
     notifyListeners();
+    final Map<String, dynamic> updateData = {
+      'title': title,
+      'description': description,
+      'image':
+          'https://thumbs-prod.si-cdn.com/-Bw2AdjyqIJrZLHAFfsHWuabXmk=/800x600/filters:no_upscale()/https://public-media.si-cdn.com/filer/79/da/79da64da-018b-49f2-b590-8b2e8bc62f9e/chocolate.jpg',
+      'price': price,
+      'userEmail': selectedProduct.userEmail,
+      'userId': selectedProduct.userId
+    };
+    return http
+        .put(
+            'https://flutter-products-f8ba8.firebaseio.com/products/${selectedProduct.id}.json',
+            body: json.encode(updateData))
+        .then((http.Response respinse) {
+      _isLoading = false;
+      final Product updatedProduct = Product(
+          id: selectedProduct.id,
+          title: title,
+          description: description,
+          image: image,
+          price: price,
+          userEmail: selectedProduct.userEmail,
+          userId: selectedProduct.userId);
+      _products[selectedProductIndex] = updatedProduct;
+      notifyListeners();
+    });
   }
 
   void deleteProduct() {
