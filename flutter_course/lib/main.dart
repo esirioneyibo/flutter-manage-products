@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:flutter_course/models/product.dart';
 import "package:scoped_model/scoped_model.dart";
 // import "package:flutter/rendering.dart";
 import './pages/auth.dart';
@@ -6,6 +7,7 @@ import './pages/products_admin.dart';
 import './pages/products.dart';
 import './pages/product.dart';
 import './scoped_models/main.dart';
+import './models/product.dart';
 
 // A shoter funtion notation, using only if you have 1 statement
 void main() {
@@ -54,7 +56,11 @@ class _MyAppState extends State<MyApp> {
           }
 
           if (pathElements[1] == 'product') {
-            final int index = int.parse(pathElements[2]);
+            // final int index = int.parse(pathElements[2]);
+            final String productId = pathElements[2];
+            final Product product = model.allProducts.firstWhere((Product product) {
+              return product.id == productId;
+            });
             // because we want the product page will return boolean value so we have to use
             // MaterialPageRoute<bool>
             // In products.dart:
@@ -67,7 +73,9 @@ class _MyAppState extends State<MyApp> {
             //           }),
             return MaterialPageRoute<bool>(
               builder: (BuildContext context) =>
-                  ProductPage(index),
+                  // ProductPage(index),
+                  // ProductPage(productId),
+                  ProductPage(product),
             );
           }
 
