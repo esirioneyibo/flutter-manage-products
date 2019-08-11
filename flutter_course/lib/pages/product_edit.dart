@@ -23,7 +23,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
   // final FocusNode _descriptionFocusNode = FocusNode();
   // final FocusNode _priceFocusNode = FocusNode();
 
-  TextFormField _buildTitleTextField(Product product) {
+  Widget _buildTitleTextField(Product product) {
     return TextFormField(
       initialValue: product == null ? '' : product.title,
       decoration: InputDecoration(labelText: 'Product Title'),
@@ -38,7 +38,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
     );
   }
 
-  TextFormField _buildDescriptionTextField(Product product) {
+  Widget _buildDescriptionTextField(Product product) {
     return TextFormField(
       initialValue: product == null ? '' : product.description,
       maxLines: 4,
@@ -54,7 +54,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
     );
   }
 
-  TextFormField _buildPriceTextField(Product product) {
+  Widget _buildPriceTextField(Product product) {
     return TextFormField(
       initialValue: product == null ? '' : product.price.toString(),
       decoration: InputDecoration(labelText: 'Product Price'),
@@ -88,7 +88,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
     );
   }
 
-  GestureDetector _buildPageContent(BuildContext context, Product product) {
+  Widget _buildPageContent(BuildContext context, Product product) {
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;
@@ -178,9 +178,15 @@ class _ProductEditPageState extends State<ProductEditPage> {
       builder: (BuildContext context, Widget child, MainModel model) {
         final Widget pageContent =
             _buildPageContent(context, model.selectedProduct);
-        return model.selectedProductIndex == -1
-            ? pageContent
-            : Scaffold(
+        // return model.selectedProductIndex == -1
+        //     ? pageContent
+        //     : Scaffold(
+        //         appBar: AppBar(
+        //           title: Text('Edit Product'),
+        //         ),
+        //         body: pageContent,
+        //       );
+              return Scaffold(
                 appBar: AppBar(
                   title: Text('Edit Product'),
                 ),
