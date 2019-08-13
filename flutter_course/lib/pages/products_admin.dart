@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_course/widgets/ui_elements/logout_list_title.dart';
 import './product_edit.dart';
 import './product_list.dart';
 import '../scoped_models/main.dart';
@@ -22,6 +23,8 @@ class ProductsAdminPage extends StatelessWidget {
               Navigator.pushReplacementNamed(context, '/products');
             },
           ),
+          Divider(),
+          LogoutListTitle(),
         ],
       ),
     );

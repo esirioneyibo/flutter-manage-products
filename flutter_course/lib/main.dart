@@ -31,6 +31,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    _model.autoAuthenticate();
   }
 
   @override
@@ -50,7 +51,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/admin': (BuildContext context) => ProductsAdminPage(_model),
           // '/' is the same with home:, so if defined '/', we shouldn't use home: like above (home: AuthPage())
-          '/': (BuildContext context) => AuthPage(),
+          '/': (BuildContext context) => _model.user == null ? AuthPage() : ProductsPage(_model),
           '/products': (BuildContext context) => ProductsPage(_model),
         },
         onGenerateRoute: (RouteSettings settings) {
