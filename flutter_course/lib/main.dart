@@ -27,11 +27,17 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final MainModel _model = MainModel();
+  bool _isAuthenticated = false;
 
   @override
   void initState() {
     super.initState();
     _model.autoAuthenticate();
+    _model.userSubject.listen((bool isAuthenticated) {
+      setState(() {
+        _isAuthenticated = isAuthenticated;
+      });
+    });
   }
 
   @override
@@ -49,12 +55,22 @@ class _MyAppState extends State<MyApp> {
             buttonColor: Colors.deepPurple),
         // home: AuthPage(),
         routes: {
-          '/admin': (BuildContext context) => ProductsAdminPage(_model),
+          '/admin': (BuildContext context) =>
+              !_isAuthenticated ? AuthPage() : ProductsAdminPage(_model),
           // '/' is the same with home:, so if defined '/', we shouldn't use home: like above (home: AuthPage())
-          '/': (BuildContext context) => _model.user == null ? AuthPage() : ProductsPage(_model),
-          '/products': (BuildContext context) => ProductsPage(_model),
+          '/': (BuildContext context) =>
+              !_isAuthenticated ? AuthPage() : ProductsPage(_model)
         },
         onGenerateRoute: (RouteSettings settings) {
+          if (!_isAuthenticated) {
+            return MaterialPageRoute<bool>(
+              builder: (BuildContext context) =>
+                  // ProductPage(index),
+                  // ProductPage(productId),
+                  AuthPage(),
+            );
+          }
+
           final List<String> pathElements =
               settings.name.split('/'); // Ex: /product/1 => '','product','1'
 
@@ -83,7 +99,7 @@ class _MyAppState extends State<MyApp> {
               builder: (BuildContext context) =>
                   // ProductPage(index),
                   // ProductPage(productId),
-                  ProductPage(product),
+                  !_isAuthenticated ? AuthPage() : ProductPage(product),
             );
           }
 
@@ -91,7 +107,8 @@ class _MyAppState extends State<MyApp> {
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute(
-              builder: (BuildContext context) => ProductsPage(_model));
+              builder: (BuildContext context) =>
+                  !_isAuthenticated ? AuthPage() : ProductsPage(_model));
         },
       ),
     );
